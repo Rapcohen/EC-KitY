@@ -3,7 +3,7 @@ This module implements the Algorithm class.
 """
 
 from abc import abstractmethod
-from concurrent.futures.thread import ThreadPoolExecutor
+from concurrent.futures.process import ProcessPoolExecutor
 import random
 from time import time
 
@@ -153,7 +153,7 @@ class Algorithm(Operator):
         self.generation_num = generation_num
 
         self.max_workers = max_workers
-        self.executor = ThreadPoolExecutor(max_workers=max_workers)
+        self.executor = ProcessPoolExecutor(max_workers=max_workers)
 
         self.final_generation_ = 0
 
@@ -206,7 +206,7 @@ class Algorithm(Operator):
         """
         Initialize the algorithm before beginning the evolution process
 
-        Initialize seed, ThreadPoolExecutor and relevant operators
+        Initialize seed, ProcessPoolExecutor and relevant operators
         """
         self.set_random_seed(self.random_seed)
         print('debug: random seed =', self.random_seed)
@@ -348,5 +348,5 @@ class Algorithm(Operator):
     # Necessary for valid unpickling, since SimpleQueue object cannot be pickled
     def __setstate__(self, state):
         self.__dict__.update(state)
-        self.executor = ThreadPoolExecutor(max_workers=self.max_workers)
+        self.executor = ProcessPoolExecutor(max_workers=self.max_workers)
         self.random_generator = random
